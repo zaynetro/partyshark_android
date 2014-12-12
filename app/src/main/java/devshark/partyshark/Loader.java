@@ -38,6 +38,16 @@ public class Loader {
         return getJSON(url);
     }
 
+    public String getPlaylists() {
+        String url = "http://172.16.0.127:8000/api/playlists/";
+        return getJSON(url);
+    }
+
+    public String addSong(Song song, Playlist playlist) {
+        String url = "http://172.16.0.127:8000/api/songs/";
+        return postJSON(url, song.getJSON(playlist));
+    }
+
     public String loadSkenes(JSONObject params) {
         String url = "https://api.parse.com/1/functions/get";
         return postJSON(url, params);
@@ -69,6 +79,7 @@ public class Loader {
                 StringEntity se = new StringEntity(json.toString());
                 // Set HTTP parameters
                 httpRequest.setEntity(se);
+                httpRequest.setHeader("Content-Type", "application/json");
                 response = (HttpResponse) httpClient.execute(httpRequest);
             } else {
                 return resultString;

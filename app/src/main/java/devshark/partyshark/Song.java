@@ -12,6 +12,9 @@ import java.util.ArrayList;
 public class Song {
     public String title;
     public int id;
+    public int playlist;
+    public boolean isPlayed;
+    public int soundCloudID;
 
     public Song(String title, int id) {
         this.title = title;
@@ -21,7 +24,9 @@ public class Song {
     public Song(JSONObject json) {
         try {
             this.title = json.getString("title");
-            this.id = json.getInt("id");
+            this.soundCloudID = json.getInt("id");
+            this.playlist = json.getInt("playlist");
+            this.isPlayed = json.getBoolean("isPlayed");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -41,5 +46,18 @@ public class Song {
         return songs;
     }
 
+    public JSONObject getJSON(Playlist playlist) {
+        JSONObject json = new JSONObject();
+
+        try {
+            json.put("soundCloudID", this.soundCloudID);
+            json.put("songTitle", this.title);
+            json.put("playlist", playlist.id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return json;
+    }
 
 }

@@ -1,10 +1,9 @@
 package devshark.partyshark;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,10 +11,8 @@ import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class Search extends Activity {
@@ -24,6 +21,7 @@ public class Search extends Activity {
     private Button searchBtn;
     private ListView foundList;
     private SongsAdapter adapter;
+    private Playlist playlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +32,19 @@ public class Search extends Activity {
         searchBtn = (Button) findViewById(R.id.searchBtn);
         foundList = (ListView) findViewById(R.id.foundList);
 
+        Intent intent = getIntent();
+        playlist = (Playlist) intent.getSerializableExtra("Playlist");
+
+        if(playlist == null) {
+            // Show error banner and go back
+        }
+
+        setTitle(playlist.name);
+
         // Construct the data source
         ArrayList<Song> songs = new ArrayList<Song>();
         // Create the adapter to convert the array to views
-        adapter = new SongsAdapter(this, songs);
+        adapter = new SongsAdapter(this, songs, playlist);
         // Attach the adapter to a ListView
         foundList.setAdapter(adapter);
     }
@@ -68,29 +75,4 @@ public class Search extends Activity {
             }
         }
     }
-
-
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-    */
 }
